@@ -1,24 +1,21 @@
-import click
-from .helpers import getImageList
+import typer
+from helpers import getImageList
 
-@click.group()
-def commands():
-    """
-    CLI tool for image processing.
-    """
-    pass
+app = typer.Typer()
 
-@click.command()
-@click.option('--path', type=click.Path(exists=True, file_okay=False, resolve_path=True), help='Path to the directory containing image files.')
-# @click.argument('path', nargs=-1, type=click.Path())
-def hello(path):
+@app.command()
+def hello(path: str = typer.Option(None, help='Path to the directory containing image files')):
     """
     Main function that takes an optional path argument and prints the list of image names.
     """
-    for filename in path:
-        click.echo(filename)
+    typer.echo(path)
     try:
         if path:
+            # Perform existence check inside the function
+            if not typer.confirm(f"Are you sure you want to process images in '{path}'?"):
+                typer.echo("Operation canceled.")
+                return
+            
             image_files = getImageList(path)
             if image_files:
                 print("List of image files:")
@@ -31,8 +28,5 @@ def hello(path):
     except Exception as e:
         print(f"An error occurred: {e}")
 
-
-commands.add_command(hello)
-
 if __name__ == '__main__':
-    commands()
+    app()
