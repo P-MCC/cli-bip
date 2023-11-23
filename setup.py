@@ -8,9 +8,9 @@ setup(
     author='P-MCC',
     author_email='',
     license='MIT',
-    install_requires=['opencv-python, click'],
+    install_requires=['opencv-python, typer'],
     packages=find_packages(),
     entry_points=dict(
-        console_scripts=['cli-bip=cli-bip.__main__:main']
+        console_scripts=['cli-bip=src.main:main']
     )
 )
